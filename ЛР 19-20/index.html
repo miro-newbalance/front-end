@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛР 19-20: Web Storage, JSON, Cookie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e1e, #2d2d2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            color: #ff9800;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+            border-bottom: 2px solid #ff9800;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #ffb74d;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 152, 0, 0.2);
+        }
+
+        input, button {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        input {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        input:focus {
+            outline: 2px solid #ff9800;
+        }
+
+        button {
+            background: #ff9800;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        button:hover {
+            background: #ffa726;
+            transform: scale(1.02);
+        }
+
+        p {
+            color: #ddd;
+            line-height: 1.6;
+            margin-top: 10px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #ff9800;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            border: 1px solid #444;
+            margin-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍪 ЛР 19-20: Web Storage, JSON, Cookie</h1>
+
+        <!-- COOKIE -->
+        <section>
+            <h2>🍪 Cookie</h2>
+            <p id="cookieMessage">Проверка cookie...</p>
+        </section>
+
+        <!-- LOCALSTORAGE -->
+        <section>
+            <h2>📦 localStorage</h2>
+            <input type="text" id="nameInput" placeholder="Введите ваше имя">
+            <button id="saveName">💾 Сохранить имя</button>
+            <p id="savedName">Имя не сохранено</p>
+        </section>
+
+        <!-- JSON FETCH -->
+        <section>
+            <h2>🔁 JSON (fetch)</h2>
+            <button id="loadJson">📥 Загрузить данные из JSON</button>
+            <pre id="jsonOutput">Нажми кнопку, чтобы загрузить</pre>
+        </section>
+    </div>
+
+    <script>
+        // ========== COOKIE ==========
+        function getCookie(name) {
+            const cookies = document.cookie.split('; ');
+            for (let c of cookies) {
+                const [key, val] = c.split('=');
+                if (key === name) return val;
+            }
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+        }
+
+        const cookieMsg = document.getElementById('cookieMessage');
+        if (!getCookie('visited')) {
+            setCookie('visited', 'true', 30);
+            cookieMsg.textContent = '🍪 Вы впервые на странице! Cookie установлена.';
+        } else {
+            cookieMsg.textContent = '🍪 С возвращением! Cookie уже есть.';
+        }
+
+        // ========== LOCALSTORAGE ==========
+        const nameInput = document.getElementById('nameInput');
+        const saveBtn = document.getElementById('saveName');
+        const savedName = document.getElementById('savedName');
+
+        // Загружаем сохранённое имя при старте
+        const storedName = localStorage.getItem('username');
+        if (storedName) {
+            savedName.textContent = `Сохранённое имя: ${storedName}`;
+        }
+
+        saveBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                localStorage.setItem('username', name);
+                savedName.textContent = `Сохранённое имя: ${name}`;
+                nameInput.value = '';
+            }
+        });
+
+        // ========== JSON FETCH ==========
+        const loadBtn = document.getElementById('loadJson');
+        const jsonOutput = document.getElementById('jsonOutput');
+
+        loadBtn.addEventListener('click', async () => {
+            jsonOutput.textContent = 'Загрузка...';
+            try {
+                const res = await fetch('data.json');
+                if (!res.ok) throw new Error('Ошибка загрузки');
+                const data = await res.json();
+                jsonOutput.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                jsonOutput.textContent = '❌ Не удалось загрузить data.json. Убедись, что файл существует.';
+            }
+        });
+    </script>
+</body>
+</html>
