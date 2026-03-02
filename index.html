@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторные работы 15-18</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #2d2d2d);
+            color: #fff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            color: #ff9800;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+        .lab-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 400px;
+        }
+        .lab-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,152,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .lab-item:hover {
+            background: rgba(255,152,0,0.2);
+            transform: translateX(10px);
+            border-color: #ff9800;
+        }
+        .lab-number {
+            background: #ff9800;
+            color: #000;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+        }
+        .lab-title {
+            font-size: 1.2em;
+            flex-grow: 1;
+        }
+        .lab-arrow {
+            color: #ff9800;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .lab-item:hover .lab-arrow {
+            opacity: 1;
+        }
+        footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        a {
+            color: #ff9800;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Лабораторные работы 15-18</h1>
+        <div class="lab-list">
+            <!-- ЛР 15 -->
+            <a href="ЛР 15/index.html" class="lab-item">
+                <span class="lab-number">15</span>
+                <span class="lab-title">Лабораторная работа №15</span>
+                <span class="lab-arrow">→</span>
+            </a>
+
+            <!-- ЛР 16 (с подпапкой quiz-game) -->
+            <a href="ЛР 16/quiz-game/index.html" class="lab-item">
+                <span class="lab-number">16</span>
+                <span class="lab-title">Лабораторная работа №16 — Quiz Game</span>
+                <span class="lab-arrow">→</span>
+            </a>
+
+            <!-- ЛР 17 -->
+            <a href="ЛР 17/index.html" class="lab-item">
+                <span class="lab-number">17</span>
+                <span class="lab-title">Лабораторная работа №17</span>
+                <span class="lab-arrow">→</span>
+            </a>
+
+            <!-- ЛР 18, задание 1 -->
+            <a href="ЛР 18/Задание 1/index.html" class="lab-item">
+                <span class="lab-number">18.1</span>
+                <span class="lab-title">ЛР 18 — Валидация (HTML5)</span>
+                <span class="lab-arrow">→</span>
+            </a>
+
+            <!-- ЛР 18, задание 2 -->
+            <a href="ЛР 18/Задание 2/validation.html" class="lab-item">
+                <span class="lab-number">18.2</span>
+                <span class="lab-title">ЛР 18 — Валидация (JavaScript)</span>
+                <span class="lab-arrow">→</span>
+            </a>
+
+            <!-- ЛР 18, задание 3 -->
+            <a href="ЛР 18/Задание 3/regex.html" class="lab-item">
+                <span class="lab-number">18.3</span>
+                <span class="lab-title">ЛР 18 — Регулярные выражения</span>
+                <span class="lab-arrow">→</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

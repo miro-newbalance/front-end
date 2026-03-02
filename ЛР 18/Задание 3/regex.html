@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регулярные выражения - Практическое применение</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .example {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result {
+            background: #e8f4f8;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            min-height: 50px;
+        }
+        .flags {
+            margin: 10px 0;
+        }
+        .flag {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            margin: 2px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .regex-pattern {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 Практическое применение регулярных выражений</h1>
+    
+    <div class="container">
+        <!-- Секция тестирования -->
+        <div class="section">
+            <h2>1. Метод RegExp.test()</h2>
+            <p>Проверяет, соответствует ли строка регулярному выражению</p>
+            
+            <div class="example">
+                <h3>Пример: Проверка email</h3>
+                <div class="input-group">
+                    <label>Введите email:</label>
+                    <input type="text" id="emailInput" placeholder="test@example.com">
+                </div>
+                <button onclick="testEmail()">Проверить email</button>
+                <div class="result" id="testResult"></div>
+                
+                <h3>Пример: Проверка даты (формат: ДД.ММ.ГГГГ)</h3>
+                <div class="input-group">
+                    <label>Введите дату:</label>
+                    <input type="text" id="dateInput" placeholder="31.12.2023">
+                </div>
+                <button onclick="testDate()">Проверить дату</button>
+                <div class="result" id="dateResult"></div>
+            </div>
+        </div>
+
+        <!-- Секция поиска -->
+        <div class="section">
+            <h2>2. Метод RegExp.exec()</h2>
+            <p>Ищет совпадение в строке и возвращает результат</p>
+            
+            <div class="example">
+                <h3>Пример: Поиск всех чисел в тексте</h3>
+                <textarea id="execText" rows="4" placeholder="Введите текст с числами: Заказ №1234, сумма 5600 рублей, скидка 15%">Заказ №1234, сумма 5600 рублей, скидка 15%</textarea>
+                <button onclick="findNumbers()">Найти все числа</button>
+                <div class="result" id="execResult"></div>
+                
+                <h3>Пример: Извлечение данных</h3>
+                <div class="input-group">
+                    <label>Формат: Имя:Возраст:Город</label>
+                    <input type="text" id="dataInput" placeholder="Иван:25:Москва,Анна:30:СПб">
+                </div>
+                <button onclick="extractData()">Извлечь данные</button>
+                <div class="result" id="dataResult"></div>
+            </div>
+        </div>
+
+        <!-- Секция строковых методов -->
+        <div class="section">
+            <h2>3. Методы String</h2>
+            
+            <div class="example">
+                <h3>String.match()</h3>
+                <p>Находит все совпадения с регулярным выражением</p>
+                <textarea id="matchText" rows="3">Телефоны: +7(123)456-78-90, 8-900-123-45-67, 89991234567</textarea>
+                <button onclick="findPhones()">Найти телефоны</button>
+                <div class="result" id="matchResult"></div>
+            </div>
+
+            <div class="example">
+                <h3>String.replace()</h3>
+                <p>Заменяет совпадения в строке</p>
+                <textarea id="replaceText" rows="3">Цена: 1000 руб. Скидка: 200 руб. Итого: 800 руб.</textarea>
+                <button onclick="replaceRubles()">Заменить "руб." на "₽"</button>
+                <div class="result" id="replaceResult"></div>
+            </div>
+        </div>
+
+        <!-- Секция флагов -->
+        <div class="section">
+            <h2>4. Флаги регулярных выражений</h2>
+            
+            <div class="flags">
+                <span class="flag">g</span> - глобальный поиск<br>
+                <span class="flag">i</span> - игнорирование регистра<br>
+                <span class="flag">m</span> - многострочный режим<br>
+                <span class="flag">s</span> - точка включает перенос строки<br>
+                <span class="flag">u</span> - поддержка Unicode
+            </div>
+
+            <div class="example">
+                <h3>Пример с флагом i (игнорирование регистра)</h3>
+                <input type="text" id="searchWord" placeholder="JavaScript">
+                <button onclick="searchCaseInsensitive()">Найти (регистр не важен)</button>
+                <div class="result" id="searchResult"></div>
+            </div>
+
+            <div class="example">
+                <h3>Пример с флагом g (глобальный поиск)</h3>
+                <textarea id="globalText" rows="3">Кот котёнок кот кошка КОТ</textarea>
+                <button onclick="findAllCats()">Найти все "кот"</button>
+                <div class="result" id="globalResult"></div>
+            </div>
+        </div>
+
+        <!-- Секция разделения -->
+        <div class="section">
+            <h2>5. String.split() с регулярными выражениями</h2>
+            
+            <div class="example">
+                <h3>Пример: Разделение по нескольким разделителям</h3>
+                <textarea id="splitText" rows="4">Яблоки,апельсины;бананы.виноград ананас</textarea>
+                <button onclick="splitText()">Разделить текст</button>
+                <div class="result" id="splitResult"></div>
+            </div>
+
+            <div class="example">
+                <h3>String.search()</h3>
+                <p>Возвращает индекс первого совпадения</p>
+                <input type="text" id="searchPattern" placeholder="\d{3}">
+                <button onclick="searchPattern()">Найти паттерн</button>
+                <div class="result" id="searchPatternResult"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="regexMethods.js"></script>
+</body>
+</html>

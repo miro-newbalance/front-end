@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользовательская форма с элементами управления</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, textarea {
+            margin: 5px 0;
+            padding: 8px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .checkbox-group, .radio-group {
+            margin: 10px 0;
+        }
+        .checkbox-item, .radio-item {
+            margin: 5px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .result-item {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-left: 3px solid #4CAF50;
+        }
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .dialog {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .dialog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .close-dialog {
+            cursor: pointer;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Пользовательская форма</h1>
+    <p>Форма содержит кнопки, текстовые поля, флажки, переключатели и списки</p>
+    
+    <form id="userForm">
+        <!-- Текстовые поля -->
+        <div class="form-section">
+            <h3>Текстовые поля</h3>
+            <label for="fullName">ФИО:</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Иванов Иван Иванович">
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="example@mail.com">
+            
+            <label for="phone">Телефон:</label>
+            <input type="tel" id="phone" name="phone" placeholder="+7 900 123-45-67">
+        </div>
+        
+        <!-- Списки -->
+        <div class="form-section">
+            <h3>Списки</h3>
+            <label for="country">Страна:</label>
+            <select id="country" name="country">
+                <option value="">Выберите страну</option>
+                <option value="ru">Россия</option>
+                <option value="by">Беларусь</option>
+                <option value="kz">Казахстан</option>
+                <option value="ua">Украина</option>
+            </select>
+            
+            <label for="interests">Интересы (удерживайте Ctrl для выбора нескольких):</label>
+            <select id="interests" name="interests" multiple size="3">
+                <option value="it">IT</option>
+                <option value="sport">Спорт</option>
+                <option value="music">Музыка</option>
+                <option value="books">Книги</option>
+                <option value="travel">Путешествия</option>
+            </select>
+        </div>
+        
+        <!-- Переключатели (радио-кнопки) -->
+        <div class="form-section">
+            <h3>Переключатели</h3>
+            <div class="radio-group">
+                <p>Пол:</p>
+                <div class="radio-item">
+                    <input type="radio" id="male" name="gender" value="мужской">
+                    <label for="male">Мужской</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="female" name="gender" value="женский">
+                    <label for="female">Женский</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="gender_other" name="gender" value="не указан" checked>
+                    <label for="gender_other">Не указан</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Флажки (чекбоксы) -->
+        <div class="form-section">
+            <h3>Флажки</h3>
+            <p>Языки программирования:</p>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="js" name="languages" value="JavaScript">
+                    <label for="js">JavaScript</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="python" name="languages" value="Python">
+                    <label for="python">Python</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="java" name="languages" value="Java">
+                    <label for="java">Java</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="cpp" name="languages" value="C++">
+                    <label for="cpp">C++</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Текстовое поле -->
+        <div class="form-section">
+            <h3>Комментарии</h3>
+            <label for="comments">Дополнительная информация:</label>
+            <textarea id="comments" name="comments" rows="4" placeholder="Введите ваши комментарии..."></textarea>
+        </div>
+        
+        <!-- Кнопки -->
+        <div class="form-section">
+            <h3>Кнопки действий</h3>
+            <button type="submit" id="submitBtn">Отправить форму</button>
+            <button type="button" id="resetBtn">Очистить форму</button>
+            <button type="button" id="showDialogBtn">Показать в диалоге</button>
+            <button type="button" id="showAlertBtn">Показать в alert</button>
+        </div>
+    </form>
+    
+    <!-- Диалоговое окно -->
+    <div id="dialogOverlay" class="dialog-overlay">
+        <div class="dialog">
+            <div class="dialog-header">
+                <h3>Данные формы (диалог)</h3>
+                <span class="close-dialog" id="closeDialog">&times;</span>
+            </div>
+            <div id="dialogContent"></div>
+        </div>
+    </div>
+    
+    <!-- Результаты на странице -->
+    <h2>Извлеченные данные:</h2>
+    <div id="results">
+        <p>Здесь будут отображены данные из формы</p>
+    </div>
+    
+    <!-- Подключаем скрипты -->
+    <script src="zad1.js"></script>
+    <script src="zad2.js"></script>
+</body>
+</html>

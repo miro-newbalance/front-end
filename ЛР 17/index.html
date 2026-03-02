@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестирование событий JavaScript</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h2 {
+            color: #2d3436;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2::before {
+            content: "•";
+            color: #667eea;
+            font-size: 2em;
+        }
+        
+        .test-area {
+            min-height: 120px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .test-area:hover {
+            border-color: #667eea;
+        }
+        
+        .draggable {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            user-select: none;
+            margin: 0 auto;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .drop-zone {
+            min-height: 100px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .drag-over {
+            background: #e3f2fd !important;
+            border: 2px dashed #2196f3 !important;
+        }
+        
+        .scroll-area {
+            height: 150px;
+            overflow-y: auto;
+            padding: 15px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .scroll-content {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .scroll-content div {
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logs-container {
+            background: #2d3436;
+            border-radius: 10px;
+            padding: 25px;
+            color: white;
+            margin-top: 40px;
+        }
+        
+        .logs-container h3 {
+            color: #00cec9;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        #log {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            height: 200px;
+            overflow-y: auto;
+            color: #00ff00;
+        }
+        
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .timer-display {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            color: #e17055;
+            margin: 15px 0;
+        }
+        
+        .file-label {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Тестирование событий JavaScript</h1>
+            <p class="subtitle">Подключены скрипты: zad1.js - zad7.js</p>
+        </header>
+        
+        <div class="dashboard">
+            <!-- Блок 1: Мышь -->
+            <div class="card">
+                <h2>События мыши <span class="file-label">zad1.js</span></h2>
+                <div class="test-area" id="mouse-area">
+                    Кликайте, двигайте, наводите мышь
+                    <div class="draggable">
+                        Элемент
+                    </div>
+                </div>
+                <div class="controls">
+                    <button onclick="logEvent('Мышь', 'Тестовая кнопка')">Тест мыши</button>
+                </div>
+            </div>
+            
+            <!-- Блок 2: Клавиатура -->
+            <div class="card">
+                <h2>События клавиатуры <span class="file-label">zad2.js</span></h2>
+                <div class="test-area">
+                    <p>Нажмите любую клавишу или введите текст:</p>
+                    <input type="text" 
+                           id="keyboard-input" 
+                           placeholder="Введите текст здесь...">
+                </div>
+                <div class="controls">
+                    <button onclick="logEvent('Клавиатура', 'Тестовая кнопка')">Тест клавиатуры</button>
+                </div>
+            </div>
+            
+            <!-- Блок 3: Drag&Drop -->
+            <div class="card">
+                <h2>Drag & Drop <span class="file-label">zad3.js</span></h2>
+                <div class="test-area">
+                    <div class="draggable" id="drag-item" draggable="true">
+                        Перетащи меня
+                    </div>
+                    <div class="drop-zone" id="drop-zone">
+                        Брось элемент сюда
+                    </div>
+                </div>
+                <div class="controls">
+                    <button onclick="resetDragDrop()">Сбросить D&D</button>
+                </div>
+            </div>
+            
+            <!-- Блок 4: Pointer события -->
+            <div class="card">
+                <h2>События указателя <span class="file-label">zad4.js</span></h2>
+                <div class="test-area" id="pointer-area">
+                    <p>Работа с мышью, пером, тачем</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+                        Координаты: X: <span id="pointer-x">0</span>, Y: <span id="pointer-y">0</span>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button onclick="logEvent('Указатель', 'Тестовая кнопка')">Тест указателя</button>
+                </div>
+            </div>
+            
+            <!-- Блок 5: Прокрутка -->
+            <div class="card">
+                <h2>События прокрутки <span class="file-label">zad5.js</span></h2>
+                <div class="scroll-area" id="scroll-area">
+                    <div class="scroll-content">
+                        <div>Прокручивайте вниз ↓</div>
+                        <div>Линия 1</div>
+                        <div>Линия 2</div>
+                        <div>Линия 3</div>
+                        <div>Линия 4</div>
+                        <div>Линия 5</div>
+                        <div>Линия 6</div>
+                        <div>Линия 7</div>
+                        <div>Линия 8</div>
+                        <div>Линия 9</div>
+                        <div>Линия 10</div>
+                        <div>Конец контента 🎯</div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button onclick="logEvent('Прокрутка', 'Тестовая кнопка')">Тест прокрутки</button>
+                </div>
+            </div>
+            
+            <!-- Блок 6: Touch события -->
+            <div class="card">
+                <h2>События тачскрина <span class="file-label">zad6.js</span></h2>
+                <div class="test-area" id="touch-area">
+                    <p>Коснитесь экрана (на мобильном устройстве)</p>
+                    <div id="touch-info" style="margin-top: 15px; font-size: 14px; color: #666;"></div>
+                </div>
+                <div class="controls">
+                    <button onclick="logEvent('Тач', 'Тестовая кнопка')">Тест тача</button>
+                </div>
+            </div>
+            
+            <!-- Блок 7: Таймер -->
+            <div class="card">
+                <h2>События таймера <span class="file-label">zad7.js</span></h2>
+                <div class="test-area">
+                    <div class="timer-display" id="timer-display">0</div>
+                    <div id="timer-status" style="text-align: center; color: #666;">Таймер остановлен</div>
+                </div>
+                <div class="controls">
+                    <button id="start-timer">Старт таймера</button>
+                    <button id="stop-timer">Стоп таймера</button>
+                    <button id="reset-timer">Сбросить таймер</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Логи событий -->
+        <div class="logs-container">
+            <h3>📋 Логи событий (консоль)</h3>
+            <div id="log">
+                <!-- Сюда будут выводиться логи -->
+            </div>
+            <div class="controls" style="margin-top: 15px;">
+                <button onclick="clearLogs()">Очистить логи</button>
+                <button onclick="testAllEvents()">Тест всех событий</button>
+            </div>
+        </div>
+        
+    </div> <!-- Закрытие .container -->
+
+    <!-- =========================================== -->
+    <!-- ПЕРВЫЙ ПОДКЛЮЧАЕМ СКРИПТЫ С ФУНКЦИЯМИ -->
+    <!-- =========================================== -->
+    
+    <!-- Сначала скрипт с общими функциями -->
+    <script>
+        // Глобальные функции для работы логов
+        function logEvent(type, message) {
+            const logDiv = document.getElementById('log');
+            if (logDiv) {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.textContent = `[${new Date().toLocaleTimeString()}] [${type}] ${message}`;
+                logDiv.appendChild(entry);
+                logDiv.scrollTop = logDiv.scrollHeight;
+            }
+            console.log(`[${type}] ${message}`);
+        }
+        
+        function clearLogs() {
+            const logDiv = document.getElementById('log');
+            if (logDiv) logDiv.innerHTML = '';
+            console.clear();
+            logEvent('Система', 'Логи очищены');
+        }
+        
+        function resetDragDrop() {
+            const dropZone = document.getElementById('drop-zone');
+            if (dropZone) {
+                dropZone.innerHTML = 'Брось элемент сюда';
+                dropZone.className = 'drop-zone';
+            }
+            logEvent('D&D', 'Drag&Drop сброшен');
+        }
+        
+        function testAllEvents() {
+            logEvent('Тест', 'Запуск теста всех событий');
+            setTimeout(() => logEvent('Мышь', 'Тестовое событие мыши'), 100);
+            setTimeout(() => logEvent('Клавиатура', 'Тестовое событие клавиатуры'), 200);
+            setTimeout(() => logEvent('D&D', 'Тестовое событие Drag&Drop'), 300);
+            setTimeout(() => logEvent('Указатель', 'Тестовое событие указателя'), 400);
+            setTimeout(() => logEvent('Прокрутка', 'Тестовое событие прокрутки'), 500);
+            setTimeout(() => logEvent('Тач', 'Тестовое событие тача'), 600);
+            setTimeout(() => logEvent('Таймер', 'Тестовое событие таймера'), 700);
+        }
+        
+        // Инициализация при загрузке
+        window.addEventListener('DOMContentLoaded', () => {
+            logEvent('Система', 'Страница загружена. Готово к тестированию!');
+        });
+    </script>
+    
+    <script src="zad1.js"></script>
+    <script src="zad2.js"></script>
+    <script src="zad3.js"></script>
+    <script src="zad4.js"></script>
+    <script src="zad5.js"></script>
+    <script src="zad6.js"></script>
+    <script src="zad7.js"></script>
+
+</body>
+</html>

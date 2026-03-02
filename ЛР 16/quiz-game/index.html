@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Угадай число!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Угадай число!</h1>
+        <p class="subtitle">Компьютер загадал число от 1 до 100. Попробуй угадать!</p>
+        
+        <div class="game-area">
+            <div class="input-section">
+                <input type="number" id="guess-input" min="1" max="100" placeholder="Введи число">
+                <button id="guess-btn">Проверить</button>
+            </div>
+            
+            <div class="info-section">
+                <div class="stats">
+                    <div class="stat">
+                        <span class="label">Попытки:</span>
+                        <span id="attempts-count" class="value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Диапазон:</span>
+                        <span id="range" class="value">1-100</span>
+                    </div>
+                </div>
+                
+                <div id="message" class="message">Начни игру! Введи первое число.</div>
+                
+                <div id="history" class="history">
+                    <!-- История попыток появится здесь -->
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button id="hint-btn">Подсказка</button>
+                <button id="new-game-btn">Новая игра</button>
+                <button id="easy-btn">Легкий (10 попыток)</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>🎮 Простая игра на JavaScript с ООП</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

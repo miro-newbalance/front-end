@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторная работа 15</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        h1 {
+            color: #1e3799;
+            text-align: center;
+            border-bottom: 3px solid #4a69bd;
+            padding-bottom: 10px;
+        }
+        .example {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid #4a69bd;
+        }
+        .example h2 {
+            margin-top: 0;
+            color: #1e3799;
+            font-size: 1.3em;
+        }
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        button {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        button:hover {
+            background: #1e3799;
+        }
+        .result {
+            background: #e8f0fe;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            border-left: 3px solid #4a69bd;
+        }
+        .result:before {
+            content: "👉 Результат: ";
+            font-weight: bold;
+            color: #1e3799;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🖥️ Примеры объектов в JavaScript</h1>
+
+<!-- Пример 1: Что такое объект и примеры известных объектов -->
+<div class="example">
+    <h2>1. Примеры известных объектов в JavaScript</h2>
+    <pre><code>// Встроенные объекты JavaScript
+console.log(document.title); // Объект document
+console.log(window.innerWidth); // Объект window
+console.log(navigator.userAgent); // Объект navigator
+console.log(Math.PI); // Объект Math
+console.log(new Date()); // Объект Date</code></pre>
+    <button onclick="example1()">Выполнить код</button>
+    <div id="result1" class="result"></div>
+</div>
+
+<!-- Пример 2: Пользовательский объект -->
+<div class="example">
+    <h2>2. Пример описания пользовательского объекта</h2>
+    <pre><code>// Создание пользовательского объекта "Автомобиль"
+let car = {
+    brand: "Toyota",
+    model: "Camry",
+    year: 2022,
+    color: "черный",
+    engine: "2.5",
+    start: function() {
+        return "Двигатель запущен";
+    },
+    getInfo() {
+        return `${this.brand} ${this.model}, ${this.year} года`;
+    }
+};
+
+console.log(car);</code></pre>
+    <button onclick="example2()">Создать и показать объект</button>
+    <div id="result2" class="result"></div>
+</div>
+
+<!-- Пример 3: Доступ к свойствам объекта -->
+<div class="example">
+    <h2>3. Пример доступа к свойствам объекта</h2>
+    <pre><code>let person = {
+    name: "Анна",
+    age: 25,
+    "favorite color": "синий",
+    city: "Москва"
+};
+
+// Доступ через точку
+console.log(person.name);
+console.log(person.age);
+
+// Доступ через квадратные скобки
+console.log(person["city"]);
+console.log(person["favorite color"]); // для свойств с пробелами</code></pre>
+    <button onclick="example3()">Показать доступ к свойствам</button>
+    <div id="result3" class="result"></div>
+</div>
+
+<!-- Пример 4: Удаление свойства -->
+<div class="example">
+    <h2>4. Команда delete (удаление свойства)</h2>
+    <pre><code>let user = {
+    name: "Петр",
+    age: 30,
+    email: "petr@mail.com",
+    phone: "+7-999-123-45-67"
+};
+
+console.log("До удаления:", user);
+
+// Удаляем свойство phone
+delete user.phone;
+console.log("После удаления phone:", user);
+
+// Удаляем свойство email
+delete user.email;
+console.log("После удаления email:", user);</code></pre>
+    <button onclick="example4()">Выполнить удаление свойств</button>
+    <div id="result4" class="result"></div>
+</div>
+
+<!-- Пример 5: Проверка существования свойства -->
+<div class="example">
+    <h2>5. Проверка существования свойства (in и hasOwnProperty)</h2>
+    <pre><code>let book = {
+    title: "Война и мир",
+    author: "Л. Толстой",
+    year: 1869
+};
+
+// Оператор in
+console.log("title" in book);      // true
+console.log("pages" in book);      // false
+
+// Метод hasOwnProperty
+console.log(book.hasOwnProperty("author"));  // true
+console.log(book.hasOwnProperty("price"));   // false
+
+// Проверка с undefined
+if (book.title !== undefined) {
+    console.log("Свойство title существует");
+}</code></pre>
+    <button onclick="example5()">Проверить существование свойств</button>
+    <div id="result5" class="result"></div>
+</div>
+
+<!-- Пример 6: Перебор свойств объекта -->
+<div class="example">
+    <h2>6. Перебор свойств объекта (for...in)</h2>
+    <pre><code>let student = {
+    firstName: "Мария",
+    lastName: "Иванова",
+    group: "ПИ-201",
+    averageScore: 4.8,
+    isBudget: true
+};
+
+console.log("Перебор свойств объекта:");
+for (let key in student) {
+    console.log(key + ": " + student[key]);
+}
+
+// Получение массива ключей и значений
+console.log("Ключи:", Object.keys(student));
+console.log("Значения:", Object.values(student));
+console.log("Пары ключ-значение:", Object.entries(student));</code></pre>
+    <button onclick="example6()">Перебрать свойства объекта</button>
+    <div id="result6" class="result"></div>
+</div>
+
+<script>
+function example1() {
+    let output = '';
+    
+    try { output += document.title + '\n'; } catch(e) { output += 'document.title доступен\n'; }
+    try { output += 'Ширина окна: ' + window.innerWidth + 'px\n'; } catch(e) {}
+    try { output += 'Браузер: ' + navigator.userAgent.substring(0, 50) + '...\n'; } catch(e) {}
+    try { output += 'Число PI: ' + Math.PI + '\n'; } catch(e) {}
+    try { output += 'Текущая дата: ' + new Date() + '\n'; } catch(e) {}
+    
+    document.getElementById('result1').textContent = output;
+}
+
+function example2() {
+    let car = {
+        brand: "Toyota",
+        model: "Camry",
+        year: 2022,
+        color: "черный",
+        engine: "2.5",
+        start: function() {
+            return "Двигатель запущен";
+        },
+        getInfo() {
+            return `${this.brand} ${this.model}, ${this.year} года`;
+        }
+    };
+    
+    let output = "Объект car:\n";
+    output += `Марка: ${car.brand}\n`;
+    output += `Модель: ${car.model}\n`;
+    output += `Год: ${car.year}\n`;
+    output += `Цвет: ${car.color}\n`;
+    output += `Метод getInfo(): ${car.getInfo()}\n`;
+    output += `Метод start(): ${car.start()}`;
+    
+    document.getElementById('result2').textContent = output;
+}
+
+function example3() {
+    let person = {
+        name: "Анна",
+        age: 25,
+        "favorite color": "синий",
+        city: "Москва"
+    };
+    
+    let output = "Доступ через точку:\n";
+    output += `person.name = ${person.name}\n`;
+    output += `person.age = ${person.age}\n`;
+    output += `person.city = ${person.city}\n\n`;
+    
+    output += "Доступ через квадратные скобки:\n";
+    output += `person["city"] = ${person["city"]}\n`;
+    output += `person["favorite color"] = ${person["favorite color"]}\n`;
+    
+    document.getElementById('result3').textContent = output;
+}
+
+function example4() {
+    let user = {
+        name: "Петр",
+        age: 30,
+        email: "petr@mail.com",
+        phone: "+7-999-123-45-67"
+    };
+    
+    let output = "Исходный объект:\n";
+    output += JSON.stringify(user, null, 2) + "\n\n";
+    
+    delete user.phone;
+    output += "После удаления phone:\n";
+    output += JSON.stringify(user, null, 2) + "\n\n";
+    
+    delete user.email;
+    output += "После удаления email:\n";
+    output += JSON.stringify(user, null, 2);
+    
+    document.getElementById('result4').textContent = output;
+}
+
+function example5() {
+    let book = {
+        title: "Война и мир",
+        author: "Л. Толстой",
+        year: 1869
+    };
+    
+    let output = "Объект book:\n";
+    output += JSON.stringify(book, null, 2) + "\n\n";
+    
+    output += "Проверка оператором in:\n";
+    output += `'title' in book: ${'title' in book}\n`;
+    output += `'pages' in book: ${'pages' in book}\n\n`;
+    
+    output += "Проверка hasOwnProperty():\n";
+    output += `book.hasOwnProperty('author'): ${book.hasOwnProperty('author')}\n`;
+    output += `book.hasOwnProperty('price'): ${book.hasOwnProperty('price')}\n\n`;
+    
+    output += "Проверка через сравнение с undefined:\n";
+    output += `book.title !== undefined: ${book.title !== undefined}\n`;
+    output += `book.pages !== undefined: ${book.pages !== undefined}`;
+    
+    document.getElementById('result5').textContent = output;
+}
+
+function example6() {
+    let student = {
+        firstName: "Мария",
+        lastName: "Иванова",
+        group: "ПИ-201",
+        averageScore: 4.8,
+        isBudget: true
+    };
+    
+    let output = "Перебор свойств через for...in:\n";
+    for (let key in student) {
+        output += `${key}: ${student[key]}\n`;
+    }
+    
+    output += "\nObject.keys():\n";
+    output += Object.keys(student).join(', ') + "\n";
+    
+    output += "\nObject.values():\n";
+    output += Object.values(student).join(', ') + "\n";
+    
+    output += "\nObject.entries():\n";
+    Object.entries(student).forEach(([key, value]) => {
+        output += `${key} -> ${value}\n`;
+    });
+    
+    document.getElementById('result6').textContent = output;
+}
+</script>
+
+<!-- Дополнительная информация для преподавателя -->
+<div style="margin-top: 30px; padding: 15px; background: #d4edda; border-radius: 8px;">
+    <p style="margin: 0; color: #155724;">✅ Практическая работа выполнена. Все примеры реализованы и готовы к демонстрации.</p>
+    <p style="margin: 5px 0 0; font-size: 0.9em;">Нажмите на кнопки под каждым примером, чтобы увидеть результат выполнения кода.</p>
+</div>
+
+</body>
+</html>

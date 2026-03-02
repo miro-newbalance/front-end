@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Валидация форм - HTML5 и JavaScript</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            grid-column: 1 / -1;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        input.valid {
+            border-color: #2ecc71;
+        }
+        
+        input.invalid {
+            border-color: #e74c3c;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .hint {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .results {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            min-height: 100px;
+        }
+        
+        .validation-status {
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .validation-status.valid {
+            background-color: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #2ecc71;
+            display: block;
+        }
+        
+        .validation-status.invalid {
+            background-color: #fadbd8;
+            color: #c0392b;
+            border: 1px solid #e74c3c;
+            display: block;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-item input {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .password-strength {
+            height: 5px;
+            background-color: #eee;
+            margin-top: 10px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+        
+        .requirements {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+        
+        .requirement.met {
+            color: #27ae60;
+        }
+        
+        .requirement.unmet {
+            color: #e74c3c;
+        }
+        
+        .requirement-icon {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Валидация пользовательских форм</h1>
+    
+    <div class="container">
+        <!-- Валидация через HTML5 -->
+        <div class="section">
+            <h2>Валидация через HTML5 атрибуты</h2>
+            <p class="hint">Используются встроенные атрибуты валидации HTML5</p>
+            
+            <form id="html5Form" novalidate>
+                <div class="form-group">
+                    <label for="htmlName">Имя (обязательное):</label>
+                    <input type="text" id="htmlName" name="htmlName" 
+                           required 
+                           placeholder="Введите ваше имя">
+                    <div class="error-message" id="htmlNameError">Поле обязательно для заполнения</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="htmlEmail">Email (формат email):</label>
+                    <input type="email" id="htmlEmail" name="htmlEmail" 
+                           required 
+                           placeholder="example@mail.com">
+                    <div class="error-message" id="htmlEmailError">Введите корректный email адрес</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="htmlAge">Возраст (диапазон 18-100):</label>
+                    <input type="number" id="htmlAge" name="htmlAge" 
+                           min="18" max="100" 
+                           placeholder="18-100">
+                    <div class="error-message" id="htmlAgeError">Возраст должен быть от 18 до 100 лет</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="htmlPhone">Телефон (паттерн):</label>
+                    <input type="tel" id="htmlPhone" name="htmlPhone" 
+                           pattern="\+7\s?[0-9]{3}\s?[0-9]{3}\s?[0-9]{2}\s?[0-9]{2}" 
+                           placeholder="+7 900 123 45 67">
+                    <div class="error-message" id="htmlPhoneError">Формат: +7 900 123 45 67</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="htmlUrl">Веб-сайт (формат URL):</label>
+                    <input type="url" id="htmlUrl" name="htmlUrl" 
+                           placeholder="https://example.com">
+                    <div class="error-message" id="htmlUrlError">Введите корректный URL адрес</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="htmlPassword">Пароль (мин. 8 символов):</label>
+                    <input type="password" id="htmlPassword" name="htmlPassword" 
+                           minlength="8"
+                           placeholder="Не менее 8 символов">
+                    <div class="error-message" id="htmlPasswordError">Пароль должен содержать не менее 8 символов</div>
+                </div>
+                
+                <button type="submit" id="html5Submit">Проверить валидацию HTML5</button>
+                
+                <div class="validation-status" id="html5ValidationStatus"></div>
+            </form>
+            
+            <div class="results" id="html5Results">
+                <h3>Результаты валидации HTML5:</h3>
+                <p>Здесь будут отображены результаты проверки формы</p>
+            </div>
+        </div>
+        
+        <!-- Валидация через JavaScript -->
+        <div class="section">
+            <h2>Валидация через JavaScript</h2>
+            <p class="hint">Кастомная валидация с использованием JavaScript</p>
+            
+            <form id="jsForm">
+                <div class="form-group">
+                    <label for="jsUsername">Имя пользователя:</label>
+                    <input type="text" id="jsUsername" name="jsUsername" 
+                           placeholder="Только буквы и цифры, 3-20 символов">
+                    <div class="error-message" id="jsUsernameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jsEmail">Email:</label>
+                    <input type="text" id="jsEmail" name="jsEmail" 
+                           placeholder="Проверка формата email">
+                    <div class="error-message" id="jsEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jsPassword">Пароль:</label>
+                    <input type="password" id="jsPassword" name="jsPassword" 
+                           placeholder="Сложный пароль">
+                    <div class="error-message" id="jsPasswordError"></div>
+                    
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    
+                    <div class="requirements">
+                        <div class="requirement" id="lengthReq">
+                            <span class="requirement-icon">❌</span>
+                            <span>Не менее 8 символов</span>
+                        </div>
+                        <div class="requirement" id="uppercaseReq">
+                            <span class="requirement-icon">❌</span>
+                            <span>Хотя бы одна заглавная буква</span>
+                        </div>
+                        <div class="requirement" id="lowercaseReq">
+                            <span class="requirement-icon">❌</span>
+                            <span>Хотя бы одна строчная буква</span>
+                        </div>
+                        <div class="requirement" id="numberReq">
+                            <span class="requirement-icon">❌</span>
+                            <span>Хотя бы одна цифра</span>
+                        </div>
+                        <div class="requirement" id="specialReq">
+                            <span class="requirement-icon">❌</span>
+                            <span>Хотя бы один специальный символ (!@#$%^&*)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jsPhone">Телефон:</label>
+                    <input type="text" id="jsPhone" name="jsPhone" 
+                           placeholder="Различные форматы номеров">
+                    <div class="error-message" id="jsPhoneError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jsDate">Дата рождения:</label>
+                    <input type="text" id="jsDate" name="jsDate" 
+                           placeholder="ДД.ММ.ГГГГ">
+                    <div class="error-message" id="jsDateError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Выберите интересы (минимум 2):</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="interest1" name="interests" value="programming">
+                            <label for="interest1">Программирование</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="interest2" name="interests" value="design">
+                            <label for="interest2">Дизайн</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="interest3" name="interests" value="music">
+                            <label for="interest3">Музыка</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="interest4" name="interests" value="sport">
+                            <label for="interest4">Спорт</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="jsInterestsError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jsComments">Комментарии (макс. 500 символов):</label>
+                    <textarea id="jsComments" name="jsComments" rows="4" 
+                              placeholder="Максимум 500 символов"></textarea>
+                    <div class="counter">Осталось символов: <span id="charCount">500</span></div>
+                    <div class="error-message" id="jsCommentsError"></div>
+                </div>
+                
+                <button type="button" id="jsValidateBtn">Проверить валидацию JS</button>
+                <button type="button" id="jsRealTimeBtn">Включить проверку в реальном времени</button>
+                
+                <div class="validation-status" id="jsValidationStatus"></div>
+            </form>
+            
+            <div class="results" id="jsResults">
+                <h3>Результаты валидации JavaScript:</h3>
+                <p>Здесь будут отображены результаты проверки формы</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем скрипты -->
+    <script src="validationHTML5.js"></script>
+    <script src="validationJS.js"></script>
+</body>
+</html>
